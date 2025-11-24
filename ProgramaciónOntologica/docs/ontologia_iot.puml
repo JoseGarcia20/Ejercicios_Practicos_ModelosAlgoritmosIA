@@ -1,0 +1,53 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam dpi 150
+left to right direction
+
+' Ontología IoT para Hogar Inteligente
+' Namespace base: http://example.org/iot# (prefijo iot)
+
+class Dispositivo {
+  +nombre: string
+  +tieneEstado: string
+}
+
+class Sensor {
+  +valor: decimal
+}
+Sensor --|> Dispositivo
+
+class Actuador
+Actuador --|> Dispositivo
+
+class Habitacion {
+  +nombre: string
+}
+
+class Usuario
+
+class Automatizacion {
+  +nombre: string
+}
+
+class Evento
+class Movimiento
+class Temperatura
+Movimiento --|> Evento
+Temperatura --|> Evento
+
+' Relaciones (propiedades de objeto)
+Dispositivo "1" --> "1" Habitacion : ubicadoEn
+Automatizacion "1" --> "*" Dispositivo : controla
+Sensor "1" --> "1" Evento : detecta
+Evento "1" --> "1..*" Automatizacion : desencadena
+Habitacion "1" --> "0..*" Usuario : perteneceA
+Dispositivo <--> Dispositivo : comparteContextoCon {symmetric}
+
+note right of Dispositivo
+  Axioma: dispositivos en la misma habitación
+  comparten contexto → relación simétrica
+  "comparteContextoCon" entre dispositivos
+end note
+
+@enduml
+
